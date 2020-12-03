@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup, NavigableString, Tag
 import asyncio
+import aiohttp
 
 async def scrape_voter(session, voter_details):
     try:
@@ -63,8 +64,12 @@ async def scrape_voter(session, voter_details):
                         result["BallotReceived"] = ballot_info[3]
                         result["Voted"] = True
 
-                    print(result)
                     return result
 
     except Exception as e:
         print(e)
+
+async def scrape_async(voters, loop):
+    async with aiohttp.ClientSession(loop=loop) as session:
+        response = await asyncio.gather(*[scrape_voter(session, line) for line in voters], return_exceptions=True)
+        return response
