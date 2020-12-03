@@ -2,6 +2,10 @@ from bs4 import BeautifulSoup, NavigableString, Tag
 import asyncio
 import aiohttp
 
+# The idea of using 'async' comes from my friend, Zanpeng Ma, who is pursuing a PhD in CS in CMU
+# Also referring to the asyncio official document async scrapping eample found here:
+# https://asyncio.readthedocs.io/en/latest/webscraper.html
+
 async def scrape_voter(session, voter_details):
     try:
         url = "https://mvic.sos.state.mi.us/Voter/SearchByName"
@@ -73,3 +77,44 @@ async def scrape_async(voters, loop):
     async with aiohttp.ClientSession(loop=loop) as session:
         response = await asyncio.gather(*[scrape_voter(session, line) for line in voters], return_exceptions=True)
         return response
+
+
+def read_file(filename, batch_size):
+    batch = []
+    batches = []
+    count = 0
+
+    with open(filename) as detroit_index:
+        for line in detroit_index:
+            if count < batch_size:
+                batch.append(line)
+                count += 1
+            else:
+                count = 0
+                batches.append(batch)
+                batch = []
+
+    if len(batch) > 0:
+        batches.append(batch)
+
+    return batches
+
+def scrape():
+    # do in batches
+    batches = read_file("WayneCountyDeadVoter.txt", 100)
+
+    registered_dead_voters = []
+    dead_voters_who_voted = []
+    loop = asyncio.get_event_loop()
+    for batch in batches:
+        responses = loop.run_until_complete(scrape_async(batch, loop))
+        new_batch_voters = [voter for voter in responses if voter is not None]
+        registered_dead_voters += new_batch_voters
+        dead_voters_who_voted += [voter for voter in new_batch_voters if voter["Voted"]]
+
+        # output
+        stats = dump_stats(registered_dead_voters, dead_voters_who_voted)
+        dump_info(dead_voters_who_voted, "dead_voters_who_voted.json")
+        dump_info(registered_dead_voters, "registered_dead_voters.json")
+
+    return
