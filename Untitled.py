@@ -2,6 +2,8 @@ from bs4 import BeautifulSoup, NavigableString, Tag
 import asyncio
 import aiohttp
 
+import json
+
 # The idea of using 'async' comes from my friend, Zanpeng Ma, who is pursuing a PhD in CS in CMU
 # Also referring to the asyncio official document async scrapping eample found here:
 # https://asyncio.readthedocs.io/en/latest/webscraper.html
@@ -99,6 +101,25 @@ def read_file(filename, batch_size):
 
     return batches
 
+
+def dump_info(data, filename):
+    with open(f"out\\{filename}", "w") as output_file:
+        output_file.write(json.dumps(data, indent=4))
+
+    return data
+
+
+def dump_stats(registered_dead_voters, dead_voters_who_voted):
+    data = {
+        "RegisteredDeadVoters": len(registered_dead_voters),
+        "DeadVotersWhoVoted": len(dead_voters_who_voted),
+        "Percent": "{:.2%}".format(float(len(dead_voters_who_voted)/len(registered_dead_voters)))
+    }
+    dump_info(data, "info_dump.json")
+
+    return data
+
+
 def scrape():
     # do in batches
     batches = read_file("WayneCountyDeadVoter.txt", 100)
@@ -117,4 +138,15 @@ def scrape():
         dump_info(dead_voters_who_voted, "dead_voters_who_voted.json")
         dump_info(registered_dead_voters, "registered_dead_voters.json")
 
-    return
+    return stats
+
+if __name__ == "__main__":
+    try:
+        print("SCRAPING DEAD VOTERS...")
+
+        stats = scrape()
+
+        print("SUCCESS!")
+        print(stats)
+    except Exception as e:
+        print(e)
