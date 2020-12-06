@@ -1,7 +1,7 @@
 import pandas as pd
-import os
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import utility                  # Self-created
 
 from pathlib import Path
