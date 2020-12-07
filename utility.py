@@ -12,5 +12,5 @@ def birthyeartoage(dataset, birthyear, currentyear):
     return
 
 def over100(dataset, birthyear, currentyear):
-    dataset['over100'] = np.where(dataset[birthyear] < (currentyear - 99), True, False)
+    dataset['Over100'] = np.where(dataset[birthyear] < (currentyear - 99), 1, 0)
     return
