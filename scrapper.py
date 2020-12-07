@@ -122,7 +122,7 @@ def dump_stats(registered_dead_voters, dead_voters_who_voted):
 
 def scrape():
     # do in batches
-    batches = read_file("WayneCountyDeadVoter.txt", 100)
+    batches = read_file("DeadVoter.txt", 100)
 
     registered_dead_voters = []
     dead_voters_who_voted = []
