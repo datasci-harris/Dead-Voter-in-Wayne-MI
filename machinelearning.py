@@ -1,3 +1,42 @@
+import utility
+
+over100_registered_MI = pd.read_json(Path(os.getcwd())/'out/registered_dead_voters.json', orient=str)
+registered_incomplete_wayne = pd.read_csv(Path(os.getcwd())/'mi_wa_voterfile.csv')
+
+wayne_zip = registered_incomplete_wayne['zip_code'].unique().tolist()
+over100_wayne = over100_registered_MI.loc[over100_registered_MI['ZipCode'].isin(wayne_zip)]
+
+rename = {'first_name':'FirstName', 'last_name':'LastName', 'birth_year':'BirthYear', 'zip_code':'ZipCode'}
+whole = pd.concat([over100_wayne, registered_incomplete_wayne.rename(columns=rename)], join='inner')
+whole.head()
+over100(whole, 'BirthYear', 2020)
+whole1 = whole.groupby(['ZipCode', 'over100']).size().reset_index(name='count')
+whole1 = whole1.pivot(index='ZipCode', columns='BirthYear', values='Count')
+whole1.columns.name = None                                                  # remove columns name, 'LineCode'
+whole1 = whole1.reset_index()                                       # index to columns
+whole.head()
+
+
+def organize_byzip(dataset, variable):
+    dataset = dataset.loc[dataset['ZipCode'].isin(detroit['zip'])]
+    dataset = dataset.groupby(['ZipCode', variable]).size().reset_index(name='Count')
+    dataset = dataset.pivot(index='ZipCode', columns=variable, values='Count')
+    dataset.columns.name = None                                                  # remove columns name, 'LineCode'
+    afterzip = dataset.reset_index()                                       # index to columns
+
+    return afterzip
+
+organize_byzip(whole, 'over100')
+
+
+
+
+
+
+
+
+
+
 import pandas as pd
 import os
 import matplotlib.pyplot as plt
