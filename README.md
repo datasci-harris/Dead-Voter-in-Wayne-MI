@@ -34,9 +34,5 @@ The linear regression model here is a simplified one. If we could access to more
 ### Machine Learning
 We then tried to make some machine learning model. We tested several supervised models, although most of them do not predict very well. Surprisingly, both dimensionality reduction and clustering delivered really beautiful result. So we believe, if we could have more county-level or zipcode-level data to better train this model, we might be able to predict the result using the percentage of the over-100 voter.
 
-### GIS mapping
-We also tried to map the amount of over-100 voters and some other variables onto the map of Wayne County area. You could see this part of work in the Jupyter notebook.
-
-
 ## Part 3 Finding and thoughts
 Overall, based on the modeling, data analysis work, and our qualitative analysis, ***we believe the distribution of the over-100 voters in pro-Democrats area is pretty doubtable***. This may not lead to a conclusion of whether there exist fraud voting behavior or not, but I do believe we need to invest more time and energy to obtain more data and further follow this topic.
