@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 def ziptorange(dataset, rangeset, zipvariable, rangename):
-    dataset[rangename] = np.where(dataset[zipvariable].isin(rangeset), True, False)
+    dataset[rangename] = np.where(dataset[zipvariable].isin(rangeset), 1, 0)
     return
 
 def birthyeartoage(dataset, birthyear, currentyear):
