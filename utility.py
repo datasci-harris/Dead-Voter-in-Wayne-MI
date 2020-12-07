@@ -14,3 +14,11 @@ def birthyeartoage(dataset, birthyear, currentyear):
 def over100(dataset, birthyear, currentyear):
     dataset['Over100'] = np.where(dataset[birthyear] < (currentyear - 99), 1, 0)
     return
+
+# Make a function to organize any variable by zipvariable
+def organize_byzip(dataset, variable, zipvariable):
+    dataset = dataset.groupby([zipvariable, variable]).size().reset_index(name='Count')
+    dataset = dataset.pivot(index=zipvariable, columns=variable, values='Count')
+    dataset.columns.name = None
+    afterzip = dataset.reset_index()
+    return afterzip
