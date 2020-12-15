@@ -29,7 +29,7 @@ async def scrape_voter(session, voter_details):
                 "Months": None,
                 "VoterNotFound": False,
                 "TransitionVoter": False
-            }
+            }#JL: don't leave brackets on lines alone like this in Python
 
             async with session.post(url=url, data=body) as response:
                 html = await response.text()
@@ -148,5 +148,5 @@ if __name__ == "__main__":
 
         print("SUCCESS!")
         print(stats)
-    except Exception as e:
+    except Exception as e: #JL: there's no need to capture an exception if you don't do anything with it
         print(e)
