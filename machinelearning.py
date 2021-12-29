@@ -19,6 +19,11 @@ from sklearn.decomposition import PCA
 
 from pathlib import Path
 
+"""
+General grading comments:
+- You make good use of functions, but left a lot of code out of them that should have been organized into one
+- Good project and nicely written code
+"""
 
 # Read in dataset
 over100_registered_MI = pd.read_json(Path(os.getcwd())/'out/registered_dead_voters.json', orient=str)
@@ -104,7 +109,7 @@ def test_on(X_test, Y_test, model):
 
     mat = confusion_matrix(Y_test, predict)
     ax = sns.heatmap(mat, square = True, annot = True, cbar = False)
-    matplotlib.pyplot.show(ax)
+    matplotlib.pyplot.show(ax) #JL: plt.show(ax)
 
     return result
 
